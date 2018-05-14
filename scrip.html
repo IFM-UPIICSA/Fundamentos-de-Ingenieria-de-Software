@@ -27,18 +27,42 @@ var consulta = {"deseado":deseado, "faltante":faltante,"dias_holgura":dias_holgu
 var consultaJSON = JSON.stringify(consulta);
 var obj_consulta = JSON.parse(consultaJSON);
 
+//Salida de Datos
+document.getElementById("demo").innerHTML += "Deseado: "+obj_consulta.deseado +"<br>Faltante: "+faltante +"<br> Dias Holgura: "+ dias_holgura+"<br><br>"; 
+
+//Obtencion del precio del producto por dia
 var i=0;
 var price = new Array(obj_pro.length);
 while (obj_pro.id_proveedor[i]!=undefined){
 	
     price[i]=obj_pro.precio[i] / obj_pro.dias_surtido[i];
-    document.getElementById("demo").innerHTML +="I "+i+"  ID proveedor:"+obj_pro.id_proveedor[i]+" Dias_surtido " +obj_pro.dias_surtido[i]+" Precio "+obj_pro.precio[i]+" Price"+price[i]+"<br>";
+    document.getElementById("demo").innerHTML +="ID proveedor: "+obj_pro.id_proveedor[i]+" Dias surtido: " +obj_pro.dias_surtido[i]+" Precio "+obj_pro.precio[i]+" Price "+price[i]+"<br>";
    i++; 
-    
 }
+//Dia ideal de surtido
+i=1;
+var diasMinimo=obj_pro.dias_surtido[0];
+while(obj_pro.dias_surtido[i]!=undefined){
+	if (diasMinimo==dias_holgura){
+    	obj_pro.dias_surtido[i];
+    }else if(diasMinimo>dias_holgura){
+    	obj_pro.dias_surtido[i];
+    }
+    i++;
+}
+document.getElementById("demo").innerHTML += "<br>Dias minimo "+diasMinimo;
 
-//Salida de Datos
-document.getElementById("demo").innerHTML += "<br>"+obj_pro.id_proveedor[3] + ", " + obj_pro.precio[1] +"<br>Deseado: "+obj_consulta.deseado +"<br>Faltante: "+faltante +"<br> Dias Holgura: "+ dias_holgura+"<br>Id: "+obj_pro.id_proveedor[i]+"<br>I "+i; 
+
+//Precio Minimo de surtido
+i=1;
+var minimoPrecio=price[0];
+while(price[i]!=undefined){
+	if (minimoPrecio>price[i]){
+    	minimoPrecio=price[i];
+    }
+    i++;
+}
+document.getElementById("demo").innerHTML += "<br>Precio minimo "+minimoPrecio;
 
 </script>
 
