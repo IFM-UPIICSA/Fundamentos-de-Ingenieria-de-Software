@@ -34,35 +34,59 @@ document.getElementById("demo").innerHTML += "Deseado: "+obj_consulta.deseado +"
 var i=0;
 var price = new Array(obj_pro.length);
 while (obj_pro.id_proveedor[i]!=undefined){
-	
+    
     price[i]=obj_pro.precio[i] / obj_pro.dias_surtido[i];
-    document.getElementById("demo").innerHTML +="ID proveedor: "+obj_pro.id_proveedor[i]+" Dias surtido: " +obj_pro.dias_surtido[i]+" Precio "+obj_pro.precio[i]+" Price "+price[i]+"<br>";
+    document.getElementById("demo").innerHTML +="Id proveedor: "+obj_pro.id_proveedor[i]+" Dias surtido: " +obj_pro.dias_surtido[i]+" Precio "+obj_pro.precio[i]+" Price "+price[i]+"<br>";
    i++; 
 }
-//Dia ideal de surtido
-i=1;
-var diasMinimo=obj_pro.dias_surtido[0];
+
+//Dias de Surtido
+i=0;
+var diasIdeal, idealPosition;
+var diaLejano=99, lejanoPosition;
+var diasMinimo=obj_pro.dias_surtido[0], minimoPosition;
 while(obj_pro.dias_surtido[i]!=undefined){
-	if (diasMinimo==dias_holgura){
-    	obj_pro.dias_surtido[i];
-    }else if(diasMinimo>dias_holgura){
-    	obj_pro.dias_surtido[i];
-    }
+    if (obj_pro.dias_surtido[i]==dias_holgura){
+        diasIdeal=obj_pro.dias_surtido[i];
+        idealPosition = i;
+    }if((obj_pro.dias_surtido[i]<dias_holgura)&&(obj_pro.dias_surtido[i]<diasMinimo)){
+        diasMinimo=obj_pro.dias_surtido[i];
+        minimoPosition=i;
+    }if((obj_pro.dias_surtido[i]>dias_holgura)&&(obj_pro.dias_surtido[i]<diaLejano)){
+        diaLejano=obj_pro.dias_surtido[i];
+        lejanoPosition=i;
+    } 
     i++;
 }
-document.getElementById("demo").innerHTML += "<br>Dias minimo "+diasMinimo;
+document.getElementById("demo").innerHTML += "<br>Dias ideal "+diasIdeal+"  Position "+idealPosition+"<br>Dias minimo "+diasMinimo+"  Position "+minimoPosition+"<br>Dias lejano "+diaLejano+"  Position "+lejanoPosition;
 
 
 //Precio Minimo de surtido
 i=1;
-var minimoPrecio=price[0];
+var minimoPrecio=price[0], preminPosition;
 while(price[i]!=undefined){
-	if (minimoPrecio>price[i]){
-    	minimoPrecio=price[i];
+    if (minimoPrecio>price[i]){
+        minimoPrecio=price[i];
+        preminPosition = i;
     }
     i++;
 }
-document.getElementById("demo").innerHTML += "<br>Precio minimo "+minimoPrecio;
+document.getElementById("demo").innerHTML += "<br><br>Precio minimo "+minimoPrecio+"  Position "+preminPosition;
+
+//Solicitud
+document.getElementById("demo").innerHTML += "<br><br>";
+var precio;
+var unidades;
+if(idealPosition==preminPosition){
+    document.getElementById("demo").innerHTML += "Comprar Faltante con proveedor "+idealPosition ; 
+}else if ( (diasMinimo!=undefined) ){
+    
+}else{
+    document.getElementById("demo").innerHTML += "No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el más cercano comprar";
+    unidades = faltante + (dias_holgura*obj_data.venta_diaria);
+    precio = unidades*obj_pro.precio[lejanoPosition];
+    document.getElementById("demo").innerHTML += "<br>Debera comprar "+unidades+" al proveedor No. "+lejanoPosition+" a un precio total de "+precio ;
+}
 
 </script>
 
