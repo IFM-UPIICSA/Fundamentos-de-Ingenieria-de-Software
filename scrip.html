@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Convert a string into a function.</h2>
+
+<p id="demo"></p>
+
+<script>
+
+//Entrada de Datos
+var proveedor = '{"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["400","300","500"]}';
+
+var datos = '{"actual":"4000", "venta_diaria":"2000","dias_cobertura":"5","Qt":"1000","a":"4"}';
+
+//Asignación de objetos
+var obj_pro = JSON.parse(proveedor);
+var obj_data = JSON.parse(datos);
+
+//Asignación de variables de operación
+var deseado = obj_data.Qt * obj_data.a * obj_data.dias_cobertura;
+var faltante = deseado - obj_data.actual;
+var dias_holgura = obj_data.actual / obj_data.venta_diaria;
+
+//Creación de objeto JSON de salida de operandos
+var consulta = {"deseado":deseado, "faltante":faltante,"dias_holgura":dias_holgura};
+var consultaJSON = JSON.stringify(consulta);
+var obj_consulta = JSON.parse(consultaJSON);
+
+var i=0;
+var price = new Array(obj_pro.length);
+while (obj_pro.id_proveedor[i]!=undefined){
+	
+    price[i]=obj_pro.precio[i] / obj_pro.dias_surtido[i];
+    document.getElementById("demo").innerHTML +="I "+i+"  ID proveedor:"+obj_pro.id_proveedor[i]+" Dias_surtido " +obj_pro.dias_surtido[i]+" Precio "+obj_pro.precio[i]+" Price"+price[i]+"<br>";
+   i++; 
+    
+}
+
+//Salida de Datos
+document.getElementById("demo").innerHTML += "<br>"+obj_pro.id_proveedor[3] + ", " + obj_pro.precio[1] +"<br>Deseado: "+obj_consulta.deseado +"<br>Faltante: "+faltante +"<br> Dias Holgura: "+ dias_holgura+"<br>Id: "+obj_pro.id_proveedor[i]+"<br>I "+i; 
+
+</script>
+
+</body>
+</html>
