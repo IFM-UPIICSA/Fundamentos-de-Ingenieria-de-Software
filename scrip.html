@@ -2,91 +2,125 @@
 <html>
 <body>
 
-<h2>Convert a string into a function.</h2>
+<h2>Compras</h2>
 
-<p id="demo"></p>
+<form name="ConsultaCompra">
+            <label>Datos de Proveedores:</label>
+            <input type="text" name="proveedoresData"/> <br>
+            <label>Datos de la empresa:</label>
+            <input type="text" name="empresaData"/> <br>
+            <input type="button" value="Calcular Compra" onClick="calcularCompra()"/>
+        </form>
+
+<div id="DataEmpresa"> </div>
+<div id="dataProveedores"></div>
+<div id="diasData"></div>
+<div id="precioData"></div>
+<div id="comprarData"></div>
 
 <script>
 
-//Entrada de Datos
-var proveedor = '{"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["400","300","500"]}';
-
-var datos = '{"actual":"4000", "venta_diaria":"2000","dias_cobertura":"5","Qt":"1000","a":"4"}';
-
-//Asignación de objetos
-var obj_pro = JSON.parse(proveedor);
-var obj_data = JSON.parse(datos);
-
-//Asignación de variables de operación
-var deseado = obj_data.Qt * obj_data.a * obj_data.dias_cobertura;
-var faltante = deseado - obj_data.actual;
-var dias_holgura = obj_data.actual / obj_data.venta_diaria;
-
-//Creación de objeto JSON de salida de operandos
-var consulta = {"deseado":deseado, "faltante":faltante,"dias_holgura":dias_holgura};
-var consultaJSON = JSON.stringify(consulta);
-var obj_consulta = JSON.parse(consultaJSON);
-
-//Salida de Datos
-document.getElementById("demo").innerHTML += "Deseado: "+obj_consulta.deseado +"<br>Faltante: "+faltante +"<br> Dias Holgura: "+ dias_holgura+"<br><br>"; 
-
-//Obtencion del precio del producto por dia
-var i=0;
-var price = new Array(obj_pro.length);
-while (obj_pro.id_proveedor[i]!=undefined){
-    
-    price[i]=obj_pro.precio[i] / obj_pro.dias_surtido[i];
-    document.getElementById("demo").innerHTML +="Id proveedor: "+obj_pro.id_proveedor[i]+" Dias surtido: " +obj_pro.dias_surtido[i]+" Precio "+obj_pro.precio[i]+" Price "+price[i]+"<br>";
-   i++; 
+function calcularCompra(){
+    limpiar();    
+    recibirDatos();
+    operaciones();
 }
 
-//Dias de Surtido
-i=0;
-var diasIdeal, idealPosition;
-var diaLejano=99, lejanoPosition;
-var diasMinimo=obj_pro.dias_surtido[0], minimoPosition;
-while(obj_pro.dias_surtido[i]!=undefined){
-    if (obj_pro.dias_surtido[i]==dias_holgura){
-        diasIdeal=obj_pro.dias_surtido[i];
-        idealPosition = i;
-    }if((obj_pro.dias_surtido[i]<dias_holgura)&&(obj_pro.dias_surtido[i]<diasMinimo)){
-        diasMinimo=obj_pro.dias_surtido[i];
-        minimoPosition=i;
-    }if((obj_pro.dias_surtido[i]>dias_holgura)&&(obj_pro.dias_surtido[i]<diaLejano)){
-        diaLejano=obj_pro.dias_surtido[i];
-        lejanoPosition=i;
-    } 
-    i++;
+function limpiar(){
+    document.getElementById("DataEmpresa").innerHTML="";
+    document.getElementById("dataProveedores").innerHTML="";
+    document.getElementById("diasData").innerHTML="";
+    document.getElementById("precioData").innerHTML="";
+    document.getElementById("comprarData").innerHTML="";
 }
-document.getElementById("demo").innerHTML += "<br>Dias ideal "+diasIdeal+"  Position "+idealPosition+"<br>Dias minimo "+diasMinimo+"  Position "+minimoPosition+"<br>Dias lejano "+diaLejano+"  Position "+lejanoPosition;
+
+function recibirDatos(){
+    //Recibir Datos
+    var proveedor = document.ConsultaCompra.proveedoresData.value;
+    var datos = document.ConsultaCompra.empresaData.value;
+    //Asignación
+    var obj_pro = JSON.parse(proveedor);
+    var obj_data = JSON.parse(datos);
+    //Llamar a operaciones
+    operaciones(obj_pro, obj_data);
+}
 
 
-//Precio Minimo de surtido
-i=1;
-var minimoPrecio=price[0], preminPosition;
-while(price[i]!=undefined){
-    if (minimoPrecio>price[i]){
-        minimoPrecio=price[i];
-        preminPosition = i;
+function operaciones(obj_pro,obj_data){
+    this.obj_pro = obj_pro;
+    this.obj_data= obj_data;
+    //Asignación de variables de operación
+    var deseado = obj_data.Qt * obj_data.a * obj_data.dias_cobertura;
+    var faltante = deseado - obj_data.actual;
+    var dias_holgura = obj_data.actual / obj_data.venta_diaria;
+
+    //Creación de objeto JSON de salida de operandos
+    var consulta = {"deseado":deseado, "faltante":faltante,"dias_holgura":dias_holgura};
+    var consultaJSON = JSON.stringify(consulta);
+    var obj_consulta = JSON.parse(consultaJSON);
+
+    //Salida de Datos
+    document.getElementById("DataEmpresa").innerHTML += "<br>Deseado: "+obj_consulta.deseado +"<br>Faltante: "+faltante +"<br>Actual: "+obj_data.actual+"<br>Venta diaria: "+obj_data.venta_diaria+"<br> Dias Holgura: "+ dias_holgura+"<br><br>"; 
+
+        //Obtencion del precio del producto por dia
+    var i=0;
+    var price = new Array(obj_pro.length);
+    while (obj_pro.id_proveedor[i]!=undefined){
+        
+        price[i]=obj_pro.precio[i] / obj_pro.dias_surtido[i];
+        document.getElementById("dataProveedores").innerHTML +="<div>Id proveedor: "+obj_pro.id_proveedor[i]+" Dias surtido: " +obj_pro.dias_surtido[i]+" Precio "+obj_pro.precio[i]+" Precio por dia "+price[i]+"<br></div>";
+       i++; 
     }
-    i++;
-}
-document.getElementById("demo").innerHTML += "<br><br>Precio minimo "+minimoPrecio+"  Position "+preminPosition;
 
-//Solicitud
-document.getElementById("demo").innerHTML += "<br><br>";
-var precio;
-var unidades;
-if(idealPosition==preminPosition){
-    document.getElementById("demo").innerHTML += "Comprar Faltante con proveedor "+idealPosition ; 
-}else if ( (diasMinimo!=undefined) ){
-    
-}else{
-    document.getElementById("demo").innerHTML += "No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el más cercano comprar";
-    unidades = faltante + (dias_holgura*obj_data.venta_diaria);
-    precio = unidades*obj_pro.precio[lejanoPosition];
-    document.getElementById("demo").innerHTML += "<br>Debera comprar "+unidades+" al proveedor No. "+lejanoPosition+" a un precio total de "+precio ;
+    //Dias de Surtido
+    i=0;
+    var diasIdeal, idealPosition;
+    var diaLejano=99, lejanoPosition;
+    var diasMinimo=obj_pro.dias_surtido[0], minimoPosition;
+    while(obj_pro.dias_surtido[i]!=undefined){
+        if (obj_pro.dias_surtido[i]==dias_holgura){
+            diasIdeal=obj_pro.dias_surtido[i];
+            idealPosition = i;
+        }if((obj_pro.dias_surtido[i]<dias_holgura)&&(obj_pro.dias_surtido[i]<diasMinimo)){
+            diasMinimo=obj_pro.dias_surtido[i];
+            minimoPosition=i;
+        }if((obj_pro.dias_surtido[i]>dias_holgura)&&(obj_pro.dias_surtido[i]<diaLejano)){
+            diaLejano=obj_pro.dias_surtido[i];
+            lejanoPosition=i;
+        } 
+        i++;
+    }
+    document.getElementById("diasData").innerHTML += "<div><br>Dias ideal "+diasIdeal+"  Position "+idealPosition+"<br>Dias minimo "+diasMinimo+"  Position "+minimoPosition+"<br>Dias lejano "+diaLejano+"  Position "+lejanoPosition+"</div>";
+
+
+    //Precio Minimo de surtido
+    i=1;
+    var minimoPrecio=price[0], preminPosition=0;
+    while(price[i]!=undefined){
+        if (minimoPrecio>price[i]){
+            minimoPrecio=price[i];
+            preminPosition = i;
+        }
+        i++;
+    }
+    document.getElementById("precioData").innerHTML += "<br><br>Precio minimo por dia: "+minimoPrecio+"  Position: "+preminPosition;
+
+    //Solicitud
+    var precio;
+    var unidades;
+    if(idealPosition==preminPosition){
+        precio = faltante* obj_pro.precio[idealPosition];
+        document.getElementById("comprarData").innerHTML += "<br>Comprar Faltante: "+faltante+" con proveedor "+ obj_pro.nombre[idealPosition] +" a aun costo total: "+ precio; 
+    }else if ( (diasMinimo!=undefined) ){
+        
+    }else{
+        document.getElementById("comprarData").innerHTML += "No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el más cercano comprar";
+        unidades = faltante + (dias_holgura*obj_data.venta_diaria);
+        precio = unidades*obj_pro.precio[lejanoPosition];
+        document.getElementById("comprarData").innerHTML += "<br>Debera comprar "+unidades+" al proveedor No. "+lejanoPosition+" a un precio total de "+precio ;
+    }
 }
+
 
 </script>
 
