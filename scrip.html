@@ -82,7 +82,10 @@ function operaciones(obj_pro,obj_data){
             diasIdeal=obj_pro.dias_surtido[i];
             idealPosition = i;
         }if((obj_pro.dias_surtido[i]<dias_holgura)&&(obj_pro.dias_surtido[i]<=diasMinimo)){
-            if( obj_pro.precio[i]<obj_pro.precio[minimoPosition] ){
+            if( (obj_pro.precio[i]<obj_pro.precio[minimoPosition]) && ( obj_pro.dias_surtido[i] == diasMinimo ) ){
+                diasMinimo=obj_pro.dias_surtido[i];
+                minimoPosition=i;
+            }else{
                 diasMinimo=obj_pro.dias_surtido[i];
                 minimoPosition=i;
             }
