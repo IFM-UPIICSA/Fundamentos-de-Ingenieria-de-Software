@@ -103,7 +103,7 @@ function operaciones(obj_pro,obj_data){
         }
         i++;
     }
-    document.getElementById("precioData").innerHTML += "<br>Precio minimo por dia: "+minimoPrecio+"  Position: "+preminPosition;
+    document.getElementById("precioData").innerHTML += "<br>Precio minimo por dia: "+minimoPrecio+"  Position: "+preminPosition+" Dias surtido: "+obj_pro.dias_surtido[preminPosition];
 
     //Solicitud
     var precio;
@@ -153,8 +153,17 @@ function operaciones(obj_pro,obj_data){
     //Sin ideal
     if ((diasMinimo<dias_holgura)&&(diasIdeal!=dias_holgura)){
 
-        document.getElementById("comprarData").innerHTML += "<br><br>Entro "+b+" menor que"+a ;
+        if( (minimoPosition==preminPosition) ){
+            diasSurte = obj_pro.dias_surtido[minimoPosition];
+            unidades= faltante+(diasSurte * obj_data.venta_diaria);
+            precio=faltante*obj_pro.precio[minimoPosition];
+            document.getElementById("comprarData").innerHTML += "<br>El precio mas barato es el mas rapido por lo tanto comprar "+unidades+" unidades a un precio total de "+precio+" al proveedor "+obj_pro.nombre[minimoPosition] ;
 
+        } else if ( (obj_pro.dias_surtido[minimoPosition]<obj_pro.dias_surtido[preminPosition]) && (obj_pro.dias_surtido[preminPosition]>dias_holgura) ){
+            document.getElementById("comprarData").innerHTML += "<br><br>Entro igual menor" ;
+        } else if ( (obj_pro.dias_surtido[minimoPosition]<obj_pro.dias_surtido[preminPosition]) && (obj_pro.dias_surtido[preminPosition]<dias_holgura) ){
+            document.getElementById("comprarData").innerHTML += "<br><br>Entro igual menor" ;
+        }
 
     }
 
