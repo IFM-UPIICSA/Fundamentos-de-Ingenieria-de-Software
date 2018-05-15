@@ -76,14 +76,16 @@ function operaciones(obj_pro,obj_data){
     i=0;
     var diasIdeal=99, idealPosition=99;
     var diaLejano=99, lejanoPosition;
-    var diasMinimo=obj_pro.dias_surtido[0], minimoPosition;
+    var diasMinimo=obj_pro.dias_surtido[0], minimoPosition=0;
     while(obj_pro.dias_surtido[i]!=undefined){
         if (obj_pro.dias_surtido[i]==dias_holgura){
             diasIdeal=obj_pro.dias_surtido[i];
             idealPosition = i;
         }if((obj_pro.dias_surtido[i]<dias_holgura)&&(obj_pro.dias_surtido[i]<=diasMinimo)){
-            diasMinimo=obj_pro.dias_surtido[i];
-            minimoPosition=i;
+            if( obj_pro.precio[i]<obj_pro.precio[minimoPosition] ){
+                diasMinimo=obj_pro.dias_surtido[i];
+                minimoPosition=i;
+            }
         }if((obj_pro.dias_surtido[i]>dias_holgura)&&(obj_pro.dias_surtido[i]<=diaLejano)){
             diaLejano=obj_pro.dias_surtido[i];
             lejanoPosition=i;
@@ -157,7 +159,7 @@ function operaciones(obj_pro,obj_data){
             diasSurte = obj_pro.dias_surtido[minimoPosition];
             unidades= faltante+(diasSurte * obj_data.venta_diaria);
             precio=faltante*obj_pro.precio[minimoPosition];
-            document.getElementById("comprarData").innerHTML += "<br>El precio mas barato es el mas rapido por lo tanto comprar "+unidades+" unidades a un precio total de "+precio+" al proveedor "+obj_pro.nombre[minimoPosition]+"y llegara en "+diasSurte+" dias" ;
+            document.getElementById("comprarData").innerHTML += "<br>El precio mas barato es el mas rapido por lo tanto comprar "+unidades+" unidades a un precio total de "+precio+" al proveedor "+obj_pro.nombre[minimoPosition]+" y llegara en "+diasSurte+" dias" ;
 
         } else if ( (obj_pro.dias_surtido[minimoPosition]<obj_pro.dias_surtido[preminPosition]) && (obj_pro.dias_surtido[preminPosition]>dias_holgura) ){
             
@@ -209,11 +211,12 @@ function operaciones(obj_pro,obj_data){
 {"id_proveedor":["1","2","3"],"dias_surtido":["5","3","1"],"precio":["400","300","500"],"nombre":["Carlos","Mario","Karina"]}
 {"id_proveedor":["1","2","3"],"dias_surtido":["5","3","1"],"precio":["4000","300","500"],"nombre":["Carlos","Mario","Karina"]}
 {"id_proveedor":["1","2","3"],"dias_surtido":["5","3","1"],"precio":["4000","300","500"],"nombre":["Carlos","Mario","Karina"]}
-
 {"id_proveedor":["1","2","3"],"dias_surtido":["1","3","1"],"precio":["400","300","500"],"nombre":["Carlos","Mario","Karina"]}
+{"id_proveedor":["1","2","3"],"dias_surtido":["1","1","1"],"precio":["400","300","300"],"nombre":["Carlos","Mario","Karina"]}
 //Listo para igual
 {"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["100","300","500"],"nombre":["Carlos","Mario","Karina"]}
 
 //Listo para dia lejano
 {"id_proveedor":["1","2","3"],"dias_surtido":["20","30","10"],"precio":["100","300","500"],"nombre":["Carlos","Mario","Karina"]}
+
 -->
