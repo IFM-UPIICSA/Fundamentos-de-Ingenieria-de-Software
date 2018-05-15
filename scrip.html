@@ -103,7 +103,7 @@ function operaciones(obj_pro,obj_data){
         }
         i++;
     }
-    document.getElementById("precioData").innerHTML += "<br><br>Precio minimo por dia: "+minimoPrecio+"  Position: "+preminPosition;
+    document.getElementById("precioData").innerHTML += "<br>Precio minimo por dia: "+minimoPrecio+"  Position: "+preminPosition;
 
     //Solicitud
     var precio;
@@ -111,10 +111,10 @@ function operaciones(obj_pro,obj_data){
     if(idealPosition==preminPosition){
         precio = faltante* obj_pro.precio[idealPosition];
         document.getElementById("comprarData").innerHTML += "<br>Comprar Faltante: "+faltante+" con proveedor "+ obj_pro.nombre[idealPosition] +" a aun costo total: "+ precio; 
-    }else if ( (diasMinimo!=undefined) ){
+    }if ((diasMinimo<dias_holgura)&&(idealPosition!=preminPosition)){
         
-    }else{
-        document.getElementById("comprarData").innerHTML += "No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el más cercano comprar";
+    }if((diaLejano>dias_holgura)&&(idealPosition!=preminPosition)&&(diasMinimo>dias_holgura)){
+        document.getElementById("comprarData").innerHTML += "<br>No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el mas cercano comprar";
         unidades = faltante + (dias_holgura*obj_data.venta_diaria);
         precio = unidades*obj_pro.precio[lejanoPosition];
         document.getElementById("comprarData").innerHTML += "<br>Debera comprar "+unidades+" al proveedor No. "+lejanoPosition+" a un precio total de "+precio ;
