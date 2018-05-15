@@ -75,7 +75,7 @@ function operaciones(obj_pro,obj_data){
     //Dias de Surtido
     i=0;
     var diasIdeal=99, idealPosition=99;
-    var diaLejano=99, lejanoPosition;
+    var diaLejano=99, lejanoPosition=99;
     var diasMinimo=obj_pro.dias_surtido[0], minimoPosition=0;
     while(obj_pro.dias_surtido[i]!=undefined){
         if (obj_pro.dias_surtido[i]==dias_holgura){
@@ -90,8 +90,14 @@ function operaciones(obj_pro,obj_data){
                 minimoPosition=i;
             }
         }if((obj_pro.dias_surtido[i]>dias_holgura)&&(obj_pro.dias_surtido[i]<=diaLejano)){
-            diaLejano=obj_pro.dias_surtido[i];
-            lejanoPosition=i;
+            
+            if( (obj_pro.precio[i]<obj_pro.precio[minimoPosition]) && ( obj_pro.dias_surtido[i] == diaLejano ) ){
+                diaLejano=obj_pro.dias_surtido[i];
+                lejanoPosition=i;
+            }else{
+                diaLejano=obj_pro.dias_surtido[i];
+                lejanoPosition=i;
+            }
         } 
         i++;
     }
