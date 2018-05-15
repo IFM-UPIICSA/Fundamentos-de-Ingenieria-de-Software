@@ -74,7 +74,7 @@ function operaciones(obj_pro,obj_data){
 
     //Dias de Surtido
     i=0;
-    var diasIdeal, idealPosition;
+    var diasIdeal=99, idealPosition=99;
     var diaLejano=99, lejanoPosition;
     var diasMinimo=obj_pro.dias_surtido[0], minimoPosition;
     while(obj_pro.dias_surtido[i]!=undefined){
@@ -116,10 +116,15 @@ function operaciones(obj_pro,obj_data){
     var costoTotal;
     var a = ( (obj_pro.precio[idealPosition]) / (obj_pro.dias_surtido[idealPosition]) );
     var b = ( (obj_pro.precio[minimoPosition]) / (obj_pro.dias_surtido[minimoPosition]) );
+
+    //Igual posision de ideal y precioMinimo
     if(idealPosition==preminPosition){
         precio = faltante* obj_pro.precio[idealPosition];
-        document.getElementById("comprarData").innerHTML += "<br>Comprar Faltante: "+faltante+" con proveedor "+ obj_pro.nombre[idealPosition] +" a aun costo total: "+ precio; 
-    }if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(a<b)){
+        document.getElementById("comprarData").innerHTML += "<br>Comprar Faltante: "+faltante+" con proveedor "+ obj_pro.nombre[idealPosition] +" a aun costo total: "+ precio+" y llegara en "+obj_pro.dias_surtido[idealPosition]+" dias."; 
+    }
+
+    //Dias ideal = dias holgura e idealPosition diferente de positionPrecioMinimo e precioIdealDia menor que precioMinimoDia
+    if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(a<b)){
         diasSurte = obj_pro.dias_surtido[preminPosition] - obj_pro.dias_surtido[idealPosition] ;
         unidadesAntes = diasSurte * obj_data.venta_diaria;
         unidadesDespues = faltante + unidadesAntes;
@@ -129,10 +134,12 @@ function operaciones(obj_pro,obj_data){
         document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del ideal<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[idealPosition]+" para recibirla despues de "+obj_pro.dias_surtido[idealPosition] +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias <br>El costo total sera " +costoTotal; 
 
         document.getElementById("comprarData").innerHTML += "<br><br>Precio "+a+" menor que "+b;
+    }
 
-    }if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(b<a)&&(diasMinimo<dias_holgura)){
+    //Dias ideal = dias holgura e idealPosition diferente de positionPrecioMinimo y precioMinimoDia menor que precioIdealDia 
+    if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(b<a)&&(diasMinimo<dias_holgura)){
 
-        diasSurte = obj_pro.dias_surtido[preminPosition] - obj_pro.dias_surtido[idealPosition] ;
+        diasSurte = obj_pro.dias_surtido[preminPosition] - obj_pro.dias_surtido[minimoPosition] ;
         unidadesAntes = diasSurte * obj_data.venta_diaria;
         unidadesDespues = faltante + unidadesAntes;
         precioAntes = unidadesAntes * obj_pro.precio[minimoPosition];
@@ -143,6 +150,17 @@ function operaciones(obj_pro,obj_data){
         document.getElementById("comprarData").innerHTML += "<br><br>Precio "+b+" menor que"+a ;
     }
 
+    //Sin ideal
+    if ((diasMinimo<dias_holgura)&&(diasIdeal!=dias_holgura)){
+
+        document.getElementById("comprarData").innerHTML += "<br><br>Entro "+b+" menor que"+a ;
+
+
+    }
+
+    //Sin ideal
+
+    //DiaLejano mayor que dias_Holgura e IdealPosition diferente de precioMinPosition y diasMinimo mayor que dias_holgura
     if((diaLejano>dias_holgura)&&(idealPosition!=preminPosition)&&(diasMinimo>dias_holgura)){
         document.getElementById("comprarData").innerHTML += "<br>No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el mas cercano comprar";
         unidades = faltante + (dias_holgura*obj_data.venta_diaria);
