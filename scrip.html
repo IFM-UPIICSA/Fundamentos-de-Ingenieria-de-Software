@@ -81,10 +81,10 @@ function operaciones(obj_pro,obj_data){
         if (obj_pro.dias_surtido[i]==dias_holgura){
             diasIdeal=obj_pro.dias_surtido[i];
             idealPosition = i;
-        }if((obj_pro.dias_surtido[i]<dias_holgura)&&(obj_pro.dias_surtido[i]<diasMinimo)){
+        }if((obj_pro.dias_surtido[i]<dias_holgura)&&(obj_pro.dias_surtido[i]<=diasMinimo)){
             diasMinimo=obj_pro.dias_surtido[i];
             minimoPosition=i;
-        }if((obj_pro.dias_surtido[i]>dias_holgura)&&(obj_pro.dias_surtido[i]<diaLejano)){
+        }if((obj_pro.dias_surtido[i]>dias_holgura)&&(obj_pro.dias_surtido[i]<=diaLejano)){
             diaLejano=obj_pro.dias_surtido[i];
             lejanoPosition=i;
         } 
@@ -157,10 +157,20 @@ function operaciones(obj_pro,obj_data){
             diasSurte = obj_pro.dias_surtido[minimoPosition];
             unidades= faltante+(diasSurte * obj_data.venta_diaria);
             precio=faltante*obj_pro.precio[minimoPosition];
-            document.getElementById("comprarData").innerHTML += "<br>El precio mas barato es el mas rapido por lo tanto comprar "+unidades+" unidades a un precio total de "+precio+" al proveedor "+obj_pro.nombre[minimoPosition] ;
+            document.getElementById("comprarData").innerHTML += "<br>El precio mas barato es el mas rapido por lo tanto comprar "+unidades+" unidades a un precio total de "+precio+" al proveedor "+obj_pro.nombre[minimoPosition]+"y llegara en "+diasSurte+" dias" ;
 
         } else if ( (obj_pro.dias_surtido[minimoPosition]<obj_pro.dias_surtido[preminPosition]) && (obj_pro.dias_surtido[preminPosition]>dias_holgura) ){
-            document.getElementById("comprarData").innerHTML += "<br><br>Entro igual menor" ;
+            
+            diasSurte = obj_pro.dias_surtido[preminPosition] - obj_pro.dias_surtido[minimoPosition] ;
+            unidadesAntes = diasSurte * obj_data.venta_diaria;
+            unidadesDespues = faltante + unidadesAntes;
+            precioAntes = unidadesAntes * obj_pro.precio[minimoPosition];
+            precioDespues = unidadesDespues * obj_pro.precio[preminPosition];
+            costoTotal = precioAntes+precioDespues;
+            document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del mas rapido<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[minimoPosition]+" para recibirla despues de "+diasSurte +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias <br><br>El costo total sera "+ costoTotal;  
+
+
+
         } else if ( (obj_pro.dias_surtido[minimoPosition]<obj_pro.dias_surtido[preminPosition]) && (obj_pro.dias_surtido[preminPosition]<dias_holgura) ){
             document.getElementById("comprarData").innerHTML += "<br><br>Entro igual menor" ;
         }
@@ -194,10 +204,16 @@ function operaciones(obj_pro,obj_data){
 {"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["400","300","500"],"nombre":["Carlos","Mario","Karina"]}
 {"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["4000","300","500"],"nombre":["Carlos","Mario","Karina"]}
 
+//Diferencias sin ideal
+{"id_proveedor":["1","2","3"],"dias_surtido":["5","3","1"],"precio":["400","300","10"],"nombre":["Carlos","Mario","Karina"]}
+{"id_proveedor":["1","2","3"],"dias_surtido":["5","3","1"],"precio":["400","300","500"],"nombre":["Carlos","Mario","Karina"]}
+{"id_proveedor":["1","2","3"],"dias_surtido":["5","3","1"],"precio":["4000","300","500"],"nombre":["Carlos","Mario","Karina"]}
+{"id_proveedor":["1","2","3"],"dias_surtido":["5","3","1"],"precio":["4000","300","500"],"nombre":["Carlos","Mario","Karina"]}
+
+{"id_proveedor":["1","2","3"],"dias_surtido":["1","3","1"],"precio":["400","300","500"],"nombre":["Carlos","Mario","Karina"]}
 //Listo para igual
 {"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["100","300","500"],"nombre":["Carlos","Mario","Karina"]}
 
 //Listo para dia lejano
 {"id_proveedor":["1","2","3"],"dias_surtido":["20","30","10"],"precio":["100","300","500"],"nombre":["Carlos","Mario","Karina"]}
-
 -->
