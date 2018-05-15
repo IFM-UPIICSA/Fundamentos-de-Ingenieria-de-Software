@@ -108,7 +108,7 @@ function operaciones(obj_pro,obj_data){
     i=1;
     var minimoPrecio=price[0], preminPosition=0;
     while(price[i]!=undefined){
-        if (minimoPrecio>price[i]){
+        if (minimoPrecio>=price[i]){
             minimoPrecio=price[i];
             preminPosition = i;
         }
@@ -164,6 +164,7 @@ function operaciones(obj_pro,obj_data){
     //Sin ideal
     if ((diasMinimo<dias_holgura)&&(diasIdeal!=dias_holgura)){
 
+        document.getElementById("comprarData").innerHTML += "entro";
         if( (minimoPosition==preminPosition) ){
             diasSurte = obj_pro.dias_surtido[minimoPosition];
             unidades= faltante+(diasSurte * obj_data.venta_diaria);
@@ -179,8 +180,6 @@ function operaciones(obj_pro,obj_data){
             precioDespues = unidadesDespues * obj_pro.precio[preminPosition];
             costoTotal = precioAntes+precioDespues;
             document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del mas rapido<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[minimoPosition]+" para recibirla despues de "+diasSurte +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias <br><br>El costo total sera "+ costoTotal;  
-
-
 
         } else if ( (obj_pro.dias_surtido[minimoPosition]<obj_pro.dias_surtido[preminPosition]) && (obj_pro.dias_surtido[preminPosition]<dias_holgura) ){
             document.getElementById("comprarData").innerHTML += "<br><br>Entro igual menor" ;
