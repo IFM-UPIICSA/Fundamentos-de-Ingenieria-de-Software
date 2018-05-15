@@ -114,18 +114,27 @@ function operaciones(obj_pro,obj_data){
     var precioDespues;
     var diasSurte;
 
+    var a = ( (obj_pro.precio[idealPosition]) / (obj_pro.dias_surtido[idealPosition]) );
+    var b = ( (obj_pro.precio[minimoPosition]) / (obj_pro.dias_surtido[minimoPosition]) );
     if(idealPosition==preminPosition){
         precio = faltante* obj_pro.precio[idealPosition];
         document.getElementById("comprarData").innerHTML += "<br>Comprar Faltante: "+faltante+" con proveedor "+ obj_pro.nombre[idealPosition] +" a aun costo total: "+ precio; 
-    }if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)){
+    }if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(a<b)){
         diasSurte = obj_pro.dias_surtido[preminPosition] - obj_pro.dias_surtido[idealPosition] ;
         unidadesAntes = diasSurte * obj_data.venta_diaria;
         unidadesDespues = faltante + unidadesAntes;
         precioAntes = unidadesAntes * obj_pro.precio[idealPosition];
         precioDespues = unidadesDespues * obj_pro.precio[preminPosition];
-        document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del mas rapido<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[idealPosition]+" para recibirla despues de "+obj_pro.dias_surtido[idealPosition] +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias" ; 
+        document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del ideal<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[idealPosition]+" para recibirla despues de "+obj_pro.dias_surtido[idealPosition] +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias" ; 
 
-    }if((diaLejano>dias_holgura)&&(idealPosition!=preminPosition)&&(diasMinimo>dias_holgura)){
+        document.getElementById("comprarData").innerHTML += "<br><br>Precio mayor "+a+" menor que "+b;
+
+    }if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(b<a)){
+
+        document.getElementById("comprarData").innerHTML += "<br><br>Precio "+b+" menor que"+a ;
+    }
+
+    if((diaLejano>dias_holgura)&&(idealPosition!=preminPosition)&&(diasMinimo>dias_holgura)){
         document.getElementById("comprarData").innerHTML += "<br>No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el mas cercano comprar";
         unidades = faltante + (dias_holgura*obj_data.venta_diaria);
         precio = unidades*obj_pro.precio[lejanoPosition];
