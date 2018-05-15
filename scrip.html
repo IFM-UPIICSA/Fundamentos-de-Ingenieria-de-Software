@@ -113,7 +113,7 @@ function operaciones(obj_pro,obj_data){
     var precioAntes;
     var precioDespues;
     var diasSurte;
-
+    var costoTotal;
     var a = ( (obj_pro.precio[idealPosition]) / (obj_pro.dias_surtido[idealPosition]) );
     var b = ( (obj_pro.precio[minimoPosition]) / (obj_pro.dias_surtido[minimoPosition]) );
     if(idealPosition==preminPosition){
@@ -125,11 +125,20 @@ function operaciones(obj_pro,obj_data){
         unidadesDespues = faltante + unidadesAntes;
         precioAntes = unidadesAntes * obj_pro.precio[idealPosition];
         precioDespues = unidadesDespues * obj_pro.precio[preminPosition];
-        document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del ideal<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[idealPosition]+" para recibirla despues de "+obj_pro.dias_surtido[idealPosition] +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias" ; 
+        costoTotal = precioAntes+precioDespues;
+        document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del ideal<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[idealPosition]+" para recibirla despues de "+obj_pro.dias_surtido[idealPosition] +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias <br>El costo total sera " +costoTotal; 
 
-        document.getElementById("comprarData").innerHTML += "<br><br>Precio mayor "+a+" menor que "+b;
+        document.getElementById("comprarData").innerHTML += "<br><br>Precio "+a+" menor que "+b;
 
-    }if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(b<a)){
+    }if ((diasIdeal==dias_holgura)&&(idealPosition!=preminPosition)&&(b<a)&&(diasMinimo<dias_holgura)){
+
+        diasSurte = obj_pro.dias_surtido[preminPosition] - obj_pro.dias_surtido[idealPosition] ;
+        unidadesAntes = diasSurte * obj_data.venta_diaria;
+        unidadesDespues = faltante + unidadesAntes;
+        precioAntes = unidadesAntes * obj_pro.precio[minimoPosition];
+        precioDespues = unidadesDespues * obj_pro.precio[preminPosition];
+        costoTotal = precioAntes+precioDespues;
+        document.getElementById("comprarData").innerHTML += "<br>El precio mas barato surte con "+diasSurte+" dias despues del ideal<br><br>Por lo tanto comprarar "+unidadesAntes+" unidades a un precio de "+ precioAntes+" al proveedor "+obj_pro.nombre[minimoPosition]+" para recibirla despues de "+obj_pro.dias_surtido[minimoPosition] +" dias.<br>Y comprar "+unidadesDespues+" unidades a un precio de "+precioDespues+" al proveedor "+obj_pro.nombre[preminPosition]+" para recibirlas despues de " + obj_pro.dias_surtido[preminPosition]  +" dias <br>El costo total sera "+ costoTotal;  
 
         document.getElementById("comprarData").innerHTML += "<br><br>Precio "+b+" menor que"+a ;
     }
@@ -147,3 +156,21 @@ function operaciones(obj_pro,obj_data){
 
 </body>
 </html>
+
+<!-- 
+
+//Datos Empresa
+{"actual":"4000", "venta_diaria":"2000","dias_cobertura":"5","Qt":"1000","a":"4"}
+
+        //Proveedores
+//Ideal para diferencias
+{"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["400","300","500"],"nombre":["Carlos","Mario","Karina"]}
+{"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["4000","300","500"],"nombre":["Carlos","Mario","Karina"]}
+
+//Listo para igual
+{"id_proveedor":["1","2","3"],"dias_surtido":["2","3","1"],"precio":["100","300","500"],"nombre":["Carlos","Mario","Karina"]}
+
+//Listo para dia lejano
+{"id_proveedor":["1","2","3"],"dias_surtido":["20","30","10"],"precio":["100","300","500"],"nombre":["Carlos","Mario","Karina"]}
+
+-->
