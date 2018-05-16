@@ -194,7 +194,7 @@ function operaciones(obj_pro,obj_data){
         document.getElementById("comprarData").innerHTML += "<br>No hay proveedor para satisfacer lo suficientemente rapido; por lo cual le recomiendo con el mas cercano comprar";
         unidades = faltante + (dias_holgura*obj_data.venta_diaria);
         precio = unidades*obj_pro.precio[lejanoPosition];
-        document.getElementById("comprarData").innerHTML += "<br>Debera comprar "+unidades+" al proveedor No. "+lejanoPosition+" a un precio total de "+precio ;
+        document.getElementById("comprarData").innerHTML += "<br>Debera comprar "+unidades+" al proveedor "+obj_pro.nombre[lejanoPosition]+" a un precio total de "+precio ;
     }
 }
 
