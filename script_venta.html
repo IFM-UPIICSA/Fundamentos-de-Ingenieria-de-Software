@@ -7,8 +7,8 @@
 		<h2>Ingreso de datos</h2>
 		<form name="ConsultaVenta">
             <label>Datos de Almacen:</label>
-            <input type="text" name="proveedoresData"/> <br>
-            <input type="button" value="Calcular Descuento" onClick="calcularDescuento()"/>
+            <input type="text" name="AlmacenData"/> <br>
+            <input type="button" value="Calcular Descuento" onClick="calcularCompra()"/>
         </form>
 
     <div id="DatosSalida" />
@@ -17,27 +17,41 @@
 		
 	function calcularCompra(){
 	    limpiar();    
-	    recibirDatos();
-	    operaciones();
+	 	recibir(); 
 	}
 
 	function limpiar(){
 		document.getElementById("DatosSalida").innerHTML="";
 	}
 
-	function recibrDatos(){
-
-	}
+	function recibir (){
+			var jsonAlmacen = document.ConsultaVenta.AlmacenData.value;
+			var DatosAlmacen = JSON.parse(jsonAlmacen);
+			operaciones (DatosAlmacen);
+		}
 		
+	function operaciones(DatosAlmacen){
+		var actual = DatosAlmacen.actual;
+
+
+		salida(actual);
+	}
+
+	function salida(actual){
+		document.getElementById("DatosSalida").innerHTML += "actual "+actual;
+	}
+	
+
 	</script>
 	
-	
-
 </body>
 </html>
 
 <!--
 
 	Datos de ejemplo de ingreso
+
+	{"actual":"4000","porcentajes":["0","40","70"],"descuento":["0","20","40"]}
+
 
 	-->
