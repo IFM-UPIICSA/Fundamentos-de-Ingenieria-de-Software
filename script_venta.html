@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Descuento de Venta de productos</title>
+	<!-- 
+	
+	Ismael Flores Meléndez
+	Marco Allan Espiricueto del Angel
+
+	-->
+</head>
+	<body>
+		<h2>Ingreso de datos</h2>
+		<form name="ConsultaVenta">
+            <label>Datos de Almacen:</label>
+            <input type="text" name="AlmacenData"/> <br>
+            <input type="button" value="Calcular Descuento" onClick="calcularCompra()"/>
+        </form>
+
+    <div id="DatosSalida" />
+
+    <script>
+		
+	function calcularCompra(){
+	    limpiar();    
+	 	recibir(); 
+	}
+
+	function limpiar(){
+		document.getElementById("DatosSalida").innerHTML="";
+	}
+
+	function recibir (){
+			var jsonAlmacen = document.ConsultaVenta.AlmacenData.value;
+			var DatosAlmacen = JSON.parse(jsonAlmacen);
+			operaciones (DatosAlmacen);
+		}
+		
+	function operaciones(DatosAlmacen){
+		var actual = DatosAlmacen.actual;
+		var maximo = DatosAlmacen.maximo;
+		var porcentajeCalculado = ( (actual*100)/maximo ) ;
+		var descuento;
+
+		var i=0;
+		while ( (DatosAlmacen.porcentajes[i]!=undefined) ){
+			if ( (DatosAlmacen.porcentajes[i]>=porcentajeCalculado) && (descuento==null) ) {
+				descuento = DatosAlmacen.descuento[i];
+			}
+			i++;
+		}
+
+		salida(actual,maximo,porcentajeCalculado,descuento);
+	}
+
+	function salida(actual,maximo,porcentajeCalculado,descuento){
+		document.getElementById("DatosSalida").innerHTML += "<br>Actual "+actual+"<br>Maximo "+maximo+"<br>Porcentaje Actual "+porcentajeCalculado+"<br>Descuento "+descuento+"%";
+	}
+	
+	</script>
+	
+</body>
+</html>
+
+<!--
+
+	Datos de ejemplo de ingreso
+
+	{"actual":"4000","maximo":"20000","porcentajes":["40","70","100"],"descuento":["0","20","40"]}
+
+
+	-->
