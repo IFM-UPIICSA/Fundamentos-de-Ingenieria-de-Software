@@ -2,6 +2,12 @@
 <html>
 <head>
 	<title>Descuento de Venta de productos</title>
+	<!-- 
+	
+	Ismael Flores Meléndez
+	Marco Allan Espiricueto del Angel
+
+	-->
 </head>
 	<body>
 		<h2>Ingreso de datos</h2>
@@ -32,16 +38,25 @@
 		
 	function operaciones(DatosAlmacen){
 		var actual = DatosAlmacen.actual;
+		var maximo = DatosAlmacen.maximo;
+		var porcentajeCalculado = ( (actual*100)/maximo ) ;
+		var descuento;
 
+		var i=0;
+		while ( (DatosAlmacen.porcentajes[i]!=undefined) ){
+			if ( (DatosAlmacen.porcentajes[i]>=porcentajeCalculado) && (descuento==null) ) {
+				descuento = DatosAlmacen.descuento[i];
+			}
+			i++;
+		}
 
-		salida(actual);
+		salida(actual,maximo,porcentajeCalculado,descuento);
 	}
 
-	function salida(actual){
-		document.getElementById("DatosSalida").innerHTML += "actual "+actual;
+	function salida(actual,maximo,porcentajeCalculado,descuento){
+		document.getElementById("DatosSalida").innerHTML += "<br>Actual "+actual+"<br>Maximo "+maximo+"<br>Porcentaje Actual "+porcentajeCalculado+"<br>Descuento "+descuento+"%";
 	}
 	
-
 	</script>
 	
 </body>
@@ -51,7 +66,7 @@
 
 	Datos de ejemplo de ingreso
 
-	{"actual":"4000","porcentajes":["0","40","70"],"descuento":["0","20","40"]}
+	{"actual":"4000","maximo":"20000","porcentajes":["40","70","100"],"descuento":["0","20","40"]}
 
 
 	-->
